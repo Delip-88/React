@@ -92,3 +92,11 @@ footer a{
     color: white;
     background-color: #45474b;
 }
+.seemore{
+    padding: 5px 12px;
+    outline: none;
+    font-weight: bold;
+    cursor: pointer;
+    border: transparent;
+    color: #0f76fd;
+}

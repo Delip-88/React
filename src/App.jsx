@@ -11,19 +11,29 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [searchCountry, setSearchCountry] = useState("");
+  // State variables
+  const [data, setData] = useState(null); // Stores the fetched country data
+  const [error, setError] = useState(null); // Stores any error encountered during data fetch
+  const [loading, setLoading] = useState(false); // Indicates loading state
+  const [searchCountry, setSearchCountry] = useState(""); // Holds the search query
+  const [visible, setVisible] = useState(9); // Number of countries currently visible
 
+  // Function to handle search input change
   const handleChange = (e) => {
-    setSearchCountry(e.target.value);
+    setSearchCountry(e.target.value); // Update search query based on user input
   };
 
-  const fetchData = async (countryName = "all") => {
-    setLoading(true);
-    setError(null); // Reset any previous errors before making a new request
+  // Function to handle "See more" button click
+  const handleClick = () => {
+    setVisible(satisfiedListCount); // Show all filtered countries
+  };
 
+  // Function to fetch country data from the API
+  const fetchData = async (countryName = "all") => {
+    setLoading(true); // Set loading to true before starting fetch
+    setError(null); // Reset any previous errors
+
+    // Determine the URL based on whether a specific country is searched or all countries are needed
     const url =
       countryName === "all"
         ? `https://restcountries.com/v3.1/all`
@@ -32,10 +42,11 @@ function App() {
     try {
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`); // Handle non-OK responses
       }
       const result = await response.json();
       const filteredData = result.map((country) => {
+        // Extract relevant information and format it
         const languages = country.languages
           ? Object.values(country.languages).join(", ")
           : "N/A";
@@ -54,46 +65,53 @@ function App() {
           currencies,
         };
       });
-      setData(filteredData);
+      setData(filteredData); // Store fetched data
     } catch (err) {
-      setError(err);
+      setError(err); // Store error if any occurs
     } finally {
       setLoading(false); // Ensure loading is set to false regardless of success or error
     }
   };
 
+  // Fetch data when the component mounts
   useEffect(() => {
     fetchData();
   }, []);
 
+  // Loading and error handling
   if (loading) {
-    return <div>Loading ....</div>;
+    return <div>Loading ....</div>; // Show loading indicator
   }
 
   if (error) {
-    return <div>Error occurred: {error.message}</div>;
+    return <div>Error occurred: {error.message}</div>; // Show error message
   }
 
   if (!data) {
-    return <div>No data available.</div>;
+    return <div>No data available.</div>; // Handle case where no data is available
   }
 
-  // Searched filtered data
+  // Filter and sort the data based on the search query
   const filteredList = data
     .filter((country) =>
       country.countryName.toLowerCase().includes(searchCountry.toLowerCase())
     )
     .sort((a, b) => b.population - a.population); // Sort by population in descending order
 
-  const satisfiedListCount = filteredList.length;
+  const satisfiedListCount = filteredList.length; // Count of countries satisfying the search criteria
 
-  // Filtered country language
+  // Prepare the list of languages from the filtered countries
   const languageList = filteredList.map((country) => country.languages);
-  const languagesArr = languageList.flatMap(item=> item.split(',').map(lang=>lang.trim()))
-  // console.log(languagesArr)
-  // All country population
+  const languagesArr = languageList.flatMap((item) =>
+    item.split(",").map((lang) => lang.trim())
+  );
+
+  // Calculate the total world population
   const worldPopulationList = data.map((country) => country.population);
   const worldPopulation = worldPopulationList.reduce((a, b) => a + b, 0);
+
+  // Create a new array for the visible countries
+  const visibleCountries = filteredList.slice(0, visible);
 
   return (
     <Router>
@@ -129,7 +147,7 @@ function App() {
             }}
           >
             <div className="countryWrapper">
-              {filteredList.map((country, index) => (
+              {visibleCountries.map((country, index) => (
                 <div key={index} className="country">
                   <img
                     src={country.imageUrl}
@@ -161,6 +179,12 @@ function App() {
                   </p>
                 </div>
               ))}
+              {/* Show "See more" button if there are more countries to display */}
+              {satisfiedListCount > visible && (
+                <button className="seemore" onClick={handleClick}>
+                  See more...
+                </button>
+              )}
             </div>
           </div>
         </center>
