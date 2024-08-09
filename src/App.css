@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f7f8;
+}
+
+p {
+  color: #45474b;
+}
+
+.data {
+  /* color: #495E57; */
+  color: #000;
+}
+input {
+  padding: 10px 12px;
+  font-size: 18px;
+  border-radius: 22px;
+  border: 2px solid #b9bdbb;
+}
+input:focus-within{
+    border: 4px solid #b9bdbb;
+    outline: none;
+
+}
+
+.satisfied {
+  color: #45474b;
+  font-size: 30px;
+}
+
+.yellow {
+  color: #f4ce14;
+  font-weight: 500;
+}
+.countryWrapper {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.bar {
+  display: inline-block;
+  margin-right: auto;
+  width: 100%;
+  background-color: #f4ce14;
+  height: 20px;
+  
+}
+.chart {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  width: 100%;
+  gap: 10px;
+}
+.chartWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 200px;
+  padding: 20px 200px;
+}
+
+footer {
+  padding: 10px 50px;
+
+}
+.barwrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+}
+.flag{
+    width: 280px;
+    height: 160px;
+    object-fit: contain;
+}
+
+
+footer a{
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid #f4ce14;
+    color: white;
+    background-color: #45474b;
+}
